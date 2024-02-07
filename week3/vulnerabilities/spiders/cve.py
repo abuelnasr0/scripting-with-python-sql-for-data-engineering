@@ -2,6 +2,7 @@ import scrapy
 import os
 import csv
 import json
+import sqlite3
 
 HTML_FILE = "source-EXPLOIT-DB.html"
 URL_PATH = os.path.join(os.getcwd(),HTML_FILE)
@@ -52,12 +53,44 @@ class CveSpider(scrapy.Spider):
                 for exploit in exploits:
                     writer.writerow(exploit.values())
 
+        def save_as_sqlite(exploits, data_base_name):
+            connection = sqlite3.connect(data_base_name)
+            cursor = connection.cursor()
+
+            #drop table if exists 
+            
+            create_CMD = "DROP TABLE IF EXISTS exploits;"
+            cursor.execute(create_CMD)
+            connection.commit()
+
+
+            # Create table
+            create_CMD = "CREATE TABLE IF NOT EXISTS exploits(exploit_id TEXT, cve_id TEXT);"
+            cursor.execute(create_CMD)
+            connection.commit()
+
+            #insert the data
+            insert_CMD = "INSERT INTO exploits VALUES (?, ?);"
+            for exploit in exploits:
+                exploit_id = exploit["exploit_id"]
+                cve_id = exploit["cve_id"][0]
+                cursor.execute(insert_CMD, [exploit_id, cve_id])
+            connection.commit()
+
+            #check insertion 
+            select_CMD = "SELECT * FROM exploits LIMIT 10 "
+            for i in cursor.execute(select_CMD):
+                print(i)
+
+
+
         save_as_csv(expolits, "exploits.csv")
         save_as_json(expolits, "exploits.json")
+        save_as_sqlite(expolits, "exploite.db")
         # Example output
     # {'exploit_id': '10102', 'cve_id': ['CVE-2009-4186']}
     # {'exploit_id': '1013', 'cve_id': ['CVE-2005-1598']}
-    # {'exploit_id': '10168', 'cve_id': ['CVE-2009-4767']}
+    # {'exploit_id': '10168', 'cve_id': ['CVE-2009-4767']} 
     # {'exploit_id': '10180', 'cve_id': ['CVE-2009-4091', 'CVE-2009-4092', 'CVE-2009-4093']}
     # {'exploit_id': '10183', 'cve_id': ['CVE-2011-4906']}
     # {'exploit_id': '10201', 'cve_id': ['CVE-2009-4781']}
