@@ -1,5 +1,7 @@
 import scrapy
 import os
+import csv
+import json
 
 HTML_FILE = "source-EXPLOIT-DB.html"
 URL_PATH = os.path.join(os.getcwd(),HTML_FILE)
@@ -31,13 +33,27 @@ class CveSpider(scrapy.Spider):
             if len(names) > 0 and len(id) > 0:
                 if not names[0].startswith("CVE"):
                     break
-                exploit_data["id"] = id[0][10:]
-                exploit_data["names"] = names
+                exploit_data["exploit_id"] = id[0][11:]
+                exploit_data["cve_id"] = names
                 expolits.append(exploit_data)
         
         for exploit in expolits[:10]:
             print(exploit)
 
+        def save_as_json(exploits, file_name):
+            with open(file_name, "w") as f:
+                json.dump(exploits, f, indent=4)
+
+        def save_as_csv(exploits, file_name):
+
+            with open(file_name, "w") as f:
+                writer = csv.writer(f)
+                writer.writerow(["exploit_id", "cve_id"])
+                for exploit in exploits:
+                    writer.writerow(exploit.values())
+
+        save_as_csv(expolits, "exploits.csv")
+        save_as_json(expolits, "exploits.json")
         # Example output
         # {'id': ':10102', 'names': ['CVE-2009-4186']}
         # {'id': ':1013', 'names': ['CVE-2005-1598']}
