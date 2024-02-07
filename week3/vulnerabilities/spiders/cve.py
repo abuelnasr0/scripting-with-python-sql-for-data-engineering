@@ -55,12 +55,13 @@ class CveSpider(scrapy.Spider):
         save_as_csv(expolits, "exploits.csv")
         save_as_json(expolits, "exploits.json")
         # Example output
-        # {'id': ':10102', 'names': ['CVE-2009-4186']}
-        # {'id': ':1013', 'names': ['CVE-2005-1598']}
-        # {'id': ':10168', 'names': ['CVE-2009-4767']}
-        # {'id': ':10180', 'names': ['CVE-2009-4091', 'CVE-2009-4092', 'CVE-2009-4093']}
-        # {'id': ':10183', 'names': ['CVE-2011-4906']}
-        # {'id': ':10201', 'names': ['CVE-2009-4781']}
-        # {'id': ':10216', 'names': ['CVE-2009-4223']}
-        # {'id': ':10217', 'names': ['CVE-2009-4779']}
-        # {'id': ':10218', 'names': ['CVE-2009-4082']}
+    # {'exploit_id': '10102', 'cve_id': ['CVE-2009-4186']}
+    # {'exploit_id': '1013', 'cve_id': ['CVE-2005-1598']}
+    # {'exploit_id': '10168', 'cve_id': ['CVE-2009-4767']}
+    # {'exploit_id': '10180', 'cve_id': ['CVE-2009-4091', 'CVE-2009-4092', 'CVE-2009-4093']}
+    # {'exploit_id': '10183', 'cve_id': ['CVE-2011-4906']}
+    # {'exploit_id': '10201', 'cve_id': ['CVE-2009-4781']}
+    # {'exploit_id': '10216', 'cve_id': ['CVE-2009-4223']}
+    # {'exploit_id': '10217', 'cve_id': ['CVE-2009-4779']}
+    # {'exploit_id': '10218', 'cve_id': ['CVE-2009-4082']}
+    # {'exploit_id': '10220', 'cve_id': ['CVE-2009-4220']}
